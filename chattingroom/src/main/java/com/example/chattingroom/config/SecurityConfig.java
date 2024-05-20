@@ -20,7 +20,9 @@ public class SecurityConfig {
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2Login(httpSecurityOAuth2LoginConfigurer ->
                         httpSecurityOAuth2LoginConfigurer.authorizationEndpoint(authorizationEndpointConfig ->
-                                authorizationEndpointConfig.baseUri("/oauth2/authorization")))
+                                authorizationEndpointConfig.baseUri("/oauth2/authorization"))
+                                .redirectionEndpoint(redirectionEndpointConfig ->
+                                        redirectionEndpointConfig.baseUri("/oauth2/code/**")))
                 .build();
     }
 }
