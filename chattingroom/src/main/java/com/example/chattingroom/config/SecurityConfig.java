@@ -1,5 +1,6 @@
 package com.example.chattingroom.config;
 
+import com.example.chattingroom.oauth.handler.CustomAuthenticationSuccessHandler;
 import com.example.chattingroom.service.CustomOauth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +18,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig {
 
     private final CustomOauth2UserService oauth2UserService;
+    private final CustomAuthenticationSuccessHandler successHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -36,7 +38,8 @@ public class SecurityConfig {
                                 .redirectionEndpoint(redirectionEndpointConfig ->
                                         redirectionEndpointConfig.baseUri("/login/oauth2/code/**"))// oauth login 성공 시 해당 uri로 redirect
                                 .userInfoEndpoint(userInfoEndpointConfig ->
-                                        userInfoEndpointConfig.userService(oauth2UserService))) // redirectionEndpoint("/login/oauth2/code/**")로 redirect 될 때 여기서 처리 ***
+                                        userInfoEndpointConfig.userService(oauth2UserService))// redirectionEndpoint("/login/oauth2/code/**")로 redirect 될 때 여기서 처리 ***
+                                .successHandler(successHandler))// oauth 로그인 성공 시 핸들링
                 .build();
     }
 
