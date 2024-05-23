@@ -20,8 +20,8 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         OAuth2User user = (OAuth2User) authentication.getPrincipal();
         String targetUri = UriComponentsBuilder.fromUriString("http://localhost:8080/success")
                 .queryParam("socialID", user.getName())
-
                 .build().toUriString();
+
         getRedirectStrategy().sendRedirect(request, response, targetUri);
     }
 }
