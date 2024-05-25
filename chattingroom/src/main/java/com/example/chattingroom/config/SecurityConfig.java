@@ -27,7 +27,8 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .logout(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequest ->
-                        authorizeRequest.requestMatchers(AntPathRequestMatcher.antMatcher("/**")).permitAll())
+                        authorizeRequest.requestMatchers(AntPathRequestMatcher.antMatcher("/")).permitAll()
+                                .anyRequest().authenticated())
                 .headers(headersConfigurer ->
                         headersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .sessionManagement(sessionManagement ->
