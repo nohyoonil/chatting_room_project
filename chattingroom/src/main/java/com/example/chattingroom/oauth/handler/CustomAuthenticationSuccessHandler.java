@@ -27,7 +27,9 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
 
         String accessToken = jwtUtil.generateToken(user.getUsername(), user.getName(), Duration.ofDays(1));
-        Cookie cookie = new Cookie("accessToken", accessToken);
+        Cookie cookie = new Cookie("Authorization", accessToken);
+        cookie.setMaxAge(3600);
+        cookie.setPath("/");
         response.addCookie(cookie);
 
         String targetUri = UriComponentsBuilder.fromUriString("http://localhost:8080/success")
