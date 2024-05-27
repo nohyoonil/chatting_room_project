@@ -36,18 +36,20 @@ public class CustomOauth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         Member member = optionalMember.orElseGet(() ->
                 memberRepository.save(Member.builder()
-                        .email(oAuth2UserInfo.getEmail())
-                        .socialId(oAuth2UserInfo.getId())
-                        .provider(provider)
-                        .build()));
+                                .socialId(oAuth2UserInfo.getSocialId())
+                                .name(oAuth2UserInfo.getName())
+                                .email(oAuth2UserInfo.getEmail())
+                                .provider(provider)
+                                .build()));
 
         return memberToOAuth2User(member);
     }
 
     private OAuth2User memberToOAuth2User(Member member) {
         return UserPrincipal.builder().id(member.getId())
-                .email(member.getEmail())
                 .socialId(member.getSocialId())
+                .name(member.getName())
+                .email(member.getEmail())
                 .provider(member.getProvider())
                 .build();
     }

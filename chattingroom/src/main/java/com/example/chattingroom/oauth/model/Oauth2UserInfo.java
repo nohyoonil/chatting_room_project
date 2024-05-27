@@ -14,7 +14,7 @@ public abstract class Oauth2UserInfo {
         return attributes;
     }
 
-    public abstract String getId();
+    public abstract String getSocialId();
 
     public abstract String getName();
 

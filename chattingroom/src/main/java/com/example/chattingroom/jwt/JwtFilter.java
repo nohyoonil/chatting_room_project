@@ -31,6 +31,7 @@ public class JwtFilter extends GenericFilter {
 
     private String getTokenFromCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
+        if (cookies == null) return null; //Cannot read the array length because "<local4>" is null 에러 해결
         String token = null;
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals(AUTHORIZATION_COOKIE)) {

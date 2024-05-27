@@ -14,16 +14,19 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 
     private Long id;
 
-    private String email;
-
     private String socialId;
+
+    private String name;
+
+    private String email;
 
     private Provider provider;
 
-    public UserPrincipal(Long id, String email, String socialId, Provider provider) {
+    public UserPrincipal(Long id, String socialId, String email, String name, Provider provider) {
         this.id = id;
-        this.email = email;
         this.socialId = socialId;
+        this.email = email;
+        this.name = name;
         this.provider = provider;
     }
 
