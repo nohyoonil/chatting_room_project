@@ -1,15 +1,18 @@
 package com.example.chattingroom.config;
 
 import com.example.chattingroom.jwt.JwtFilter;
+import com.example.chattingroom.oauth.handler.AuthenticationEntryPoint;
 import com.example.chattingroom.oauth.handler.CustomAuthenticationSuccessHandler;
 import com.example.chattingroom.service.CustomOauth2UserService;
 import com.example.chattingroom.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.ExceptionHandlingConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -23,6 +26,7 @@ public class SecurityConfig {
     private final JwtUtil jwtUtil;
     private final CustomOauth2UserService oauth2UserService;
     private final CustomAuthenticationSuccessHandler successHandler;
+    private final AuthenticationEntryPoint entryPoint;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -30,17 +34,17 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .logout(AbstractHttpConfigurer::disable)
+                .exceptionHandling(configurer -> configurer.authenticationEntryPoint(entryPoint))// 인증 없이 /api/** 경로 접근 시 login with oauth 2.0 페이지로 redirect 되는 문제 해결***
                 .authorizeHttpRequests(authorizeRequest ->
-                        authorizeRequest.requestMatchers(AntPathRequestMatcher.antMatcher("/")).permitAll()
-                                .requestMatchers(AntPathRequestMatcher.antMatcher("/test")).permitAll() //for test
-                                .anyRequest().authenticated())
+                        authorizeRequest.requestMatchers(AntPathRequestMatcher.antMatcher("/api/**")).authenticated()
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/**")).permitAll())
                 .headers(headersConfigurer ->
                         headersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .sessionManagement(sessionManagement ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2Login(loginConfigurer ->
                         loginConfigurer.authorizationEndpoint(authorizationEndpointConfig ->
-                                        authorizationEndpointConfig.baseUri("/oauth2/authorization"))// /oauth2/authorization/google 등 oauth2 login 진입점
+                                        authorizationEndpointConfig.baseUri("/oauth2/authorization"))
                                 .redirectionEndpoint(redirectionEndpointConfig ->
                                         redirectionEndpointConfig.baseUri("/login/oauth2/code/**"))// oauth login 성공 시 해당 uri로 redirect
                                 .userInfoEndpoint(userInfoEndpointConfig ->

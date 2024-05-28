@@ -20,7 +20,7 @@ public class TestController {
         return "login success~!";
     }
 
-    @GetMapping("/authed") // for test
+    @GetMapping("/api/test") // for test
     public String test(HttpServletResponse response) {
         Cookie cookie = new Cookie("test", "testCookie");
         response.addCookie(cookie);
