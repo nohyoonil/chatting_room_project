@@ -2,13 +2,19 @@ package com.example.chattingroom.controller;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.http.HttpResponse;
 
 @RestController
+@RequiredArgsConstructor
 public class TestController {
+
+    private final RedisTemplate<String, String> redisTemplate;
 
     @GetMapping("/")
     public String hello() {
@@ -20,10 +26,17 @@ public class TestController {
         return "login success~!";
     }
 
-    @GetMapping("/api/test") // for test
-    public String test(HttpServletResponse response) {
-        Cookie cookie = new Cookie("test", "testCookie");
-        response.addCookie(cookie);
-        return "cookie success~!";
+    @PostMapping("/redis") // for test
+    public String redisInsertTest(@RequestParam String key, @RequestParam String value) {
+        ValueOperations<String, String> valueOperation = redisTemplate.opsForValue();
+        valueOperation.set(key, value);
+        return "insert success";
+    }
+
+    @GetMapping("/redis/{key}") // for test
+    public ResponseEntity<String> redisGetTest(@PathVariable String key) {
+        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+        String value = valueOperations.get(key);
+        return ResponseEntity.ok(key + " : " + value);
     }
 }
