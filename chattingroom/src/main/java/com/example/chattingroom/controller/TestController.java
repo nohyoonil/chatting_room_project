@@ -1,20 +1,17 @@
 package com.example.chattingroom.controller;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.net.http.HttpResponse;
 
 @RestController
 @RequiredArgsConstructor
 public class TestController {
 
-    private final RedisTemplate<String, String> redisTemplate;
+    @Resource(name = "redisTemplate")
+    private ValueOperations<String, String> valueOperation;
 
     @GetMapping("/")
     public String hello() {
@@ -28,15 +25,13 @@ public class TestController {
 
     @PostMapping("/redis") // for test
     public String redisInsertTest(@RequestParam String key, @RequestParam String value) {
-        ValueOperations<String, String> valueOperation = redisTemplate.opsForValue();
         valueOperation.set(key, value);
         return "insert success";
     }
 
     @GetMapping("/redis/{key}") // for test
     public ResponseEntity<String> redisGetTest(@PathVariable String key) {
-        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
-        String value = valueOperations.get(key);
+        String value = valueOperation.get(key);
         return ResponseEntity.ok(key + " : " + value);
     }
 }
