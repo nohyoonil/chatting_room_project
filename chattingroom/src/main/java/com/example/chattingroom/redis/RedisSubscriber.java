@@ -15,7 +15,8 @@ import org.springframework.stereotype.Service;
 public class RedisSubscriber implements MessageListener {
 
     private final ObjectMapper objectMapper;
-        private final SimpMessageSendingOperations messagingTemplate;
+    private final SimpMessageSendingOperations messagingTemplate;
+    private static final String PRE_URL = "/sub/room/";
 
     /**
      * Redis에서 메시지가 발행(publish)되면 대기하고 있던 Redis Subscriber가 해당 메시지를 받아 처리
@@ -26,8 +27,7 @@ public class RedisSubscriber implements MessageListener {
             // ChatMessage 객채로 맵핑
             log.info("---method onMessage---");
             ChatMessage chatMessage = objectMapper.readValue(message.getBody(), ChatMessage.class);
-            String targetUrl = "/sub/room/" + chatMessage.getRoomId();
-            messagingTemplate.convertAndSend(targetUrl, chatMessage);
+            messagingTemplate.convertAndSend(PRE_URL + chatMessage.getRoomId(), chatMessage);
         } catch (Exception e) {
             e.printStackTrace();
         }
