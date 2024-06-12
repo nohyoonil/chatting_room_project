@@ -48,7 +48,7 @@ jobs:
     #     gradle-version: '8.5'
     #
     # - name: Build with Gradle 8.5
-    #   run: gradle build
+    #   run: chattingroom/gradle build
 
   dependency-submission:
 
