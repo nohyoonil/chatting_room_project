@@ -43,7 +43,7 @@ jobs:
       run: chattingroom/gradlew build
 
     - name: build test
-      run: ls chattingroom/build/libs
+      run: ls build/libs
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
