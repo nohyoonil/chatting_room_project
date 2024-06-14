@@ -33,20 +33,24 @@ jobs:
 
     - name: check pwd
       run: pwd
+    - run: ls
       
     - name: Grant execute permission for gradlew
       run: chmod +x chattingroom/gradlew
       
-    - run: chattingroom/gradlew init
+    - run: ./chattingroom/gradlew init
 
     - name: Build with Gradle Wrapper
-      run: chattingroom/gradlew build
+      run: ./chattingroom/gradlew build
+
+    - name: build test
+      run: ls ./chattingroom
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: cicdsample
-        path: chattingroom/build/libs/*.jar
+        path: ./chattingroom/build/libs/*.jar
 
   deploy:
     needs: build
