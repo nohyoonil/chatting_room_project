@@ -41,10 +41,10 @@ jobs:
       run: chattingroom/gradlew build
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: cicdsample
-        path: ./build/libs/*.jar
+        path: chattingroom/build/libs/*.jar
 
   deploy:
     needs: build
