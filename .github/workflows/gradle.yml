@@ -34,17 +34,15 @@ jobs:
       run: chmod +x chattingroom/gradlew
       
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
+      uses: gradle/gradle-build-action@v3
+      #uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
 
     - name: init gradle
       run: chattingroom/gradlew init
 
-    #- name: Build with Gradle Wrapper
-    #run: chattingroom/gradlew build
-    - name: Build with Gradle
-      uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
-      with:
-        arguments: build
+    - name: Build with Gradle Wrapper
+      run: chattingroom/gradlew build
+
 
     - name: build test
       run: ls chattingroom
