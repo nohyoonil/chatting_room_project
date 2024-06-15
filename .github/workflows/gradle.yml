@@ -41,7 +41,7 @@ jobs:
     - run: ./chattingroom/gradlew init
 
     - name: Build with Gradle Wrapper
-      run: ./chattingroom/gradlew build
+      run: ./chattingroom/gradlew clean build
 
     - name: build test
       run: ls ./chattingroom
