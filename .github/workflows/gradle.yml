@@ -38,7 +38,7 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x ./chattingroom/gradlew
       
-    - run: ./gradlew init
+    - run: ./chattingroom/gradlew init
 
     #- name: Build with Gradle Wrapper
     #  run: ./chattingroom/gradlew build
