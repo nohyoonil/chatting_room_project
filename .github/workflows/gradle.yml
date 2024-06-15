@@ -31,30 +31,32 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
 
+    - name: change dir
+      run: cd chattingroom
     - name: check pwd
       run: pwd
     - run: ls
       
     - name: Grant execute permission for gradlew
-      run: chmod +x chattingroom/gradlew
+      run: chmod +x ./gradlew
       
-    - run: ./chattingroom/gradlew init
+    - run: ./gradlew init
 
     #- name: Build with Gradle Wrapper
     #  run: ./chattingroom/gradlew build
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v3
     - name: Build with Gradle
-      run: ./chattingroom/gradlew build
+      run: ./gradlew build
 
     - name: build test
-      run: ls ./chattingroom
+      run: ls 
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: cicdsample
-        path: ./chattingroom/build/libs/*.jar
+        path: ./build/libs/*.jar
 
   deploy:
     needs: build
